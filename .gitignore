@@ -1,5 +1,6 @@
 # Compiled class file
 *.class
+*/bin
 
 # Log file
 *.log
@@ -22,3 +23,25 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 replay_pid*
+
+# eclipse
+*.settings
+*.project
+*.classpath
+.settings
+.cache
+.project
+.classpath
+.scala_dependencies
+bin
+.scalastyle
+.cache-*
+.pydevproject
+
+# IDEA
+.idea
+*.iml
+.idea_modules
+
+#GIT
+.gitreview
