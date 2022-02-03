@@ -1,0 +1,14 @@
+-----------------------------LETENKA-----------------------------
+Id cislo vasej rezervacie je : 4
+Meno zakaznika : A A
+Adresa : A
+Nazov letu: Barcelona
+Cislo letu: #2 | 22-06-2022 15:30:00
+
+Druh letu: Jednosmerný let
+=================================================================
+Cisla rezervovanych sedadiel :
+Sedadlo Economy class cislo: 11
+
+=================================================================
+K uhrade:104.5 €

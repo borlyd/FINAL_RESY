@@ -1,0 +1,16 @@
+-----------------------------LETENKA-----------------------------
+Id cislo vasej rezervacie je : 740
+Meno zakaznika : 1 1
+Adresa : 1
+Nazov letu: Londyn
+Cislo letu: #1 | 14-02-2022 17:00:00
+
+Druh letu: Jednosmerný let
+=================================================================
+Cisla rezervovanych sedadiel :
+Sedadlo First class cislo: 1
+
+Sedadlo Economy class cislo: 11
+
+=================================================================
+K uhrade:119.0 €
