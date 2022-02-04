@@ -5,21 +5,6 @@ public class Rezervacia {
 	Let let;
 	int sedadlo;
 
-	public static final int START = 1;
-	public static final int REGISTRACIAMENO = 2;
-	public static final int REGISTRACIAPRIEZVISKO = 3;
-	public static final int REGISTRACIAADRESA = 4;
-
-	public static final int VYBERLET = 5;
-	public static final int VYBERDRUHLETU = 6;
-	public static final int VYBERTYPLETU = 7;
-	public static final int VYBERSEDADLO = 8;
-
-	public static final int POKRACUJKONIEC = 9;
-
-	public static final int ZRUSENIEREGISTRACIE = 10;
-	public static final int IDREGISTRACIE = 11;
-
 	int stav;
 
 	public Rezervacia(Zakaznik zakaznik, Let let) {

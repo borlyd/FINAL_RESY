@@ -1,6 +1,7 @@
 package letenky;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -15,6 +16,7 @@ public class Klavesnica extends JPanel {
 
 	{
 		vytvorTextovePole();
+		vytvorPanelTlacidiel();
 		vytvorTlacidloBodka();
 		vytvorTlacidloCE();
 
@@ -46,6 +48,22 @@ public class Klavesnica extends JPanel {
 			}
 
 		});
+
+	}
+
+	private void vytvorPanelTlacidiel() {
+		panelTlacidiel = new JPanel(new GridLayout(4, 3));
+
+		pridajNumerickeTlacidlo("1");
+		pridajNumerickeTlacidlo("2");
+		pridajNumerickeTlacidlo("3");
+		pridajNumerickeTlacidlo("4");
+		pridajNumerickeTlacidlo("5");
+		pridajNumerickeTlacidlo("6");
+		pridajNumerickeTlacidlo("7");
+		pridajNumerickeTlacidlo("8");
+		pridajNumerickeTlacidlo("9");
+		pridajNumerickeTlacidlo("0");
 
 	}
 
