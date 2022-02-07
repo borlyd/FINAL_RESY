@@ -18,8 +18,12 @@ import java.awt.*;
 
 public class RezervaciaGUI extends JFrame {
 
-	private static final int SIRKA = 500;
-	private static final int VYSKA = 200;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private static final int SIRKA = 600;
+	private static final int VYSKA = 600;
 	private JTextArea obrazovka;
 	private Klavesnica klavesnica;
 	private JButton tlacidlo1;
@@ -90,15 +94,14 @@ public class RezervaciaGUI extends JFrame {
 	private void nastavObrazovku() {
 
 		if (stav == START) {
-			obrazovka.setText("----------------------------------------\n" + "Rezervacia leteniek"
-					+ "----------------------------------------\n" + "Ceny:\n" + "Klasický lístok: 4,50€\n"
-					+ "Detský lístok: 3€\n" + "----------------------------------------\n"
-					+ "Zadajte 1 pre rezerváciu\n" + "Zadajte 2 pre zrušenie rezervácie\n" + "Zadajte 3 pre ukončenie\n"
-					+ "----------------------------------------" + "Zadajte možnosť:\n");
+			obrazovka.setText(
+					"Rezervácia leteniek\n" + "\n" + "Ceny:\n" + "Klasický lístok: 4,50€\n" + "Detský lístok: 3€\n"
+							+ "\n" + "- Zadajte 1 pre rezerváciu\n" + "- Zadajte 2 pre zrušenie rezervácie\n"
+							+ "- Zadajte 3 pre ukončenie\n" + "\n" + "Zadajte možnosť:\n");
 
 		} else if (stav == REGISTRACIAMENO) {
-			obrazovka.setText("Zadali ste rezerváciu\n" + "----------------------------------------\n"
-					+ "Zadajte svoje meno: \n" + "Potvrďte kliknutím na 1 = OK");
+			obrazovka.setText(
+					"Zadali ste rezerváciu\n" + "\n" + "Zadajte svoje meno: \n" + "Potvrďte kliknutím na 1 = OK");
 
 		} else if (stav == REGISTRACIAPRIEZVISKO) {
 			obrazovka.setText("Zadajte svoje priezvisko:  \n" + "Potvrďte kliknutím na 1 = OK");
@@ -109,17 +112,15 @@ public class RezervaciaGUI extends JFrame {
 		} else if (stav == VYBERLET) {
 			var sb = new StringBuffer();
 
-			sb.append("----------------------------------------  \n" + "Vyberte let\n"
-					+ "----------------------------------------");
+			sb.append(" \n" + "Vyberte let\n" + "\n");
 
 			for (int i = 0; i < lety.size(); i++) {
 				int cisloLetu = i + 1;
-				sb.append("Let č.: " + cisloLetu);
-				sb.append("Nazov letu: " + lety.get(i).getNazov() + " cena letu: " + lety.get(i).getCenaLetu() + " | "
-						+ lety.get(i).getCasOdletu());
+				sb.append("Let č.: " + cisloLetu + "\n");
+				sb.append("Nazov letu: " + lety.get(i).getNazov() + "\n" + " cena letu: " + lety.get(i).getCenaLetu()
+						+ " | " + lety.get(i).getCasOdletu() + "\n");
 			}
-			sb.append("----------------------------------------  \n" + "Zadajte č. letu: \n"
-					+ "----------------------------------------");
+			sb.append("  \n" + "Zadajte č. letu: \n" + "\n");
 
 			obrazovka.setText(sb.toString());
 
@@ -166,6 +167,8 @@ public class RezervaciaGUI extends JFrame {
 
 	private void vytvorTlacidla() {
 		tlacidlo1 = new JButton("1");
+		tlacidlo1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		tlacidlo1.setBounds(282, 84, 89, 23);
 
 		tlacidlo1.addActionListener(new ActionListener() {
 
@@ -242,6 +245,8 @@ public class RezervaciaGUI extends JFrame {
 		});
 
 		tlacidlo2 = new JButton("2");
+		tlacidlo2.setFont(new Font("Tahoma", Font.BOLD, 15));
+		tlacidlo2.setBounds(282, 155, 89, 23);
 		tlacidlo2.addActionListener(new ActionListener() {
 
 			@Override
@@ -276,6 +281,8 @@ public class RezervaciaGUI extends JFrame {
 		});
 
 		tlacidlo3 = new JButton("3");
+		tlacidlo3.setFont(new Font("Tahoma", Font.BOLD, 15));
+		tlacidlo3.setBounds(282, 218, 89, 23);
 		tlacidlo3.addActionListener(new ActionListener() {
 
 			@Override
@@ -297,6 +304,10 @@ public class RezervaciaGUI extends JFrame {
 
 	private void vytvorObrazovku() {
 		obrazovka = new JTextArea(8, 20);
+		obrazovka.setBounds(40, 80, 330, 200);
+
+		obrazovka.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		obrazovka.setFont(new Font("Serif", Font.ITALIC, 16));
 		obrazovka.setEditable(false);
 		obrazovka.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 	}
