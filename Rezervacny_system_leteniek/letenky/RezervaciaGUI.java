@@ -209,7 +209,7 @@ public class RezervaciaGUI extends JFrame {
 				} else if (stav == VYBERLET) {
 					let = lety.get(0);
 
-					pokladna.zaratajPlatbuZaCisloLetu(1);
+					pokladna.zaratajPlatbuZaCisloLetu(let);
 
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
@@ -268,7 +268,7 @@ public class RezervaciaGUI extends JFrame {
 				if (stav == VYBERLET) {
 					let = lety.get(1);
 
-					pokladna.zaratajPlatbuZaCisloLetu(2);
+					pokladna.zaratajPlatbuZaCisloLetu(let);
 
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
