@@ -2,58 +2,58 @@ package letenky;
 
 public class Pokladna {
 
-    private double suma;
-    private String typPlatby;
+	private double suma;
 
-    public Pokladna() {
-    }
+	RezervaciaGUI rezervaciaGUI = new RezervaciaGUI();
 
-    public void pripocitajKSume(double cena) {
-	this.suma += cena;
-    }
-
-    public void resetTyp() {
-	this.typPlatby = "";
-    }
-
-    public void zaratajPlatbu(String typ, int zvolenaMoznost, double cenaLetu) {
-	this.typPlatby = typ;
-	switch (typPlatby) {
-	case "typ":
-	    if (zvolenaMoznost == 1) {
-		pripocitajKSume(4.50);
-		break;
-	    } else if (zvolenaMoznost == 2) {
-		pripocitajKSume(3);
-		break;
-	    }
-
-	case "druh":
-	    if (zvolenaMoznost == 1) {
-		pripocitajKSume(cenaLetu);
-		break;
-	    } else if (zvolenaMoznost == 2) {
-		pripocitajKSume(cenaLetu * 2);
-		break;
-	    }
-	case "trieda":
-	    if (zvolenaMoznost == 1) {
-		pripocitajKSume(30);
-		break;
-	    } else if (zvolenaMoznost == 2) {
-		pripocitajKSume(0);
-		break;
-	    }
+	public Pokladna() {
 	}
 
-    }
+	public void pripocitajKSume(double cena) {
+		this.suma += cena;
+	}
 
-    public void resetCeny() {
-	this.suma = 0;
-    }
+	public void zaratajPlatbuZaCisloLetu(int cisloLetu) {
+		if (cisloLetu == 1) {
+			pripocitajKSume(rezervaciaGUI.lety.get(0).getCenaLetu());
+		} else if (cisloLetu == 2) {
+			pripocitajKSume(rezervaciaGUI.lety.get(1).getCenaLetu());
+		} else if (cisloLetu == 3) {
+			pripocitajKSume(rezervaciaGUI.lety.get(2).getCenaLetu());
+		}
+	}
 
-    public double getSuma() {
-	return suma;
-    }
+	public void zaratajPlatbuZaDruhLetu(int druhLetu) {
+		if (druhLetu == 1) {
+			pripocitajKSume(0);
+
+		} else if (druhLetu == 2) {
+			pripocitajKSume(suma);
+		}
+	}
+
+	public void zaratajPlatbuZaTypLetu(int typLetu) {
+		if (typLetu == 1) {
+			pripocitajKSume(4.50);
+		} else if (typLetu == 2) {
+			pripocitajKSume(3);
+		}
+	}
+
+	public void zaratajPlatbuZaTriedu(int triedaLetu) {
+		if (triedaLetu == 1) {
+			pripocitajKSume(30);
+		} else if (triedaLetu == 2) {
+			pripocitajKSume(0);
+		}
+	}
+
+	public void resetCeny() {
+		this.suma = 0;
+	}
+
+	public double getSuma() {
+		return suma;
+	}
 
 }

@@ -19,11 +19,14 @@ import java.awt.*;
 public class RezervaciaGUI extends JFrame {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	/**
+	 *
+	 */
 	private static final int SIRKA = 600;
-	private static final int VYSKA = 600;
+	private static final int VYSKA = 400;
 	private JTextArea obrazovka;
 	private Klavesnica klavesnica;
 	private JButton tlacidlo1;
@@ -33,11 +36,10 @@ public class RezervaciaGUI extends JFrame {
 
 	private Stav stav;
 
-	ArrayList<Zakaznik> pasaziery = new ArrayList<Zakaznik>();
+	ArrayList<Zakaznik> pasazieri = new ArrayList<Zakaznik>();
 	ArrayList<Let> lety = new ArrayList<Let>();
 	ArrayList<Rezervacia> rezervacie = new ArrayList<Rezervacia>();
 	Pokladna pokladna = new Pokladna();
-	private Rezervacia rezervacia;
 
 	String meno;
 	String priezvisko;
@@ -45,7 +47,7 @@ public class RezervaciaGUI extends JFrame {
 	Let let;
 	int druhLetu; // 1 jednosmerny a 2 obojsmerny
 	int typLetu; // 1 dospely a 2 dieta
-	int trieda; // ekonomická a biznis trieda
+	int triedaLetu; // ekonomická a biznis trieda
 	int cisloSedadla;
 
 	private static Calendar nastavDatumACas(Calendar c, int rok, int mes, int den, int hod, int min, int sec) {
@@ -118,7 +120,7 @@ public class RezervaciaGUI extends JFrame {
 				int cisloLetu = i + 1;
 				sb.append("Let č.: " + cisloLetu + "\n");
 				sb.append("Nazov letu: " + lety.get(i).getNazov() + "\n" + " cena letu: " + lety.get(i).getCenaLetu()
-						+ " | " + lety.get(i).getCasOdletu() + "\n");
+						+ " | " + lety.get(i).getCasOdletu());
 			}
 			sb.append("  \n" + "Zadajte č. letu: \n" + "\n");
 
@@ -174,7 +176,7 @@ public class RezervaciaGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Rezervacia rezervacia;
+
 				if (stav == START) {
 					stav = REGISTRACIAMENO;
 					nastavObrazovku();
@@ -198,7 +200,7 @@ public class RezervaciaGUI extends JFrame {
 					int id = rand.nextInt(1000);
 
 					Zakaznik zakaznik = new Zakaznik(id, meno, priezvisko, adresa);
-					pasaziery.add(zakaznik);
+					pasazieri.add(zakaznik);
 					stav = VYBERLET;
 
 					klavesnica.setText("");
@@ -207,37 +209,48 @@ public class RezervaciaGUI extends JFrame {
 				} else if (stav == VYBERLET) {
 					let = lety.get(0);
 
+					pokladna.zaratajPlatbuZaCisloLetu(1);
+
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
 					druhLetu = 1;
+
+					pokladna.zaratajPlatbuZaDruhLetu(1);
+
 					stav = VYBERTYPLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
 					typLetu = 1;
+
+					pokladna.zaratajPlatbuZaTypLetu(1);
 					stav = VYBERTRIEDU;
+
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
-					trieda = 1;
+					triedaLetu = 1;
+
+					pokladna.zaratajPlatbuZaTriedu(1);
+
 					stav = VYBERSEDADLO;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERSEDADLO) {
 					cisloSedadla = Integer.valueOf(klavesnica.getText());
+
 					stav = POKRACUJKONIEC;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == POKRACUJKONIEC) {
-					String adresa = String.valueOf(klavesnica.getText());
-					stav = IDREGISTRACIE;
+					stav = VYBERLET;
 					klavesnica.setText("");
 					nastavObrazovku();
 				}
@@ -247,6 +260,7 @@ public class RezervaciaGUI extends JFrame {
 		tlacidlo2 = new JButton("2");
 		tlacidlo2.setFont(new Font("Tahoma", Font.BOLD, 15));
 		tlacidlo2.setBounds(282, 155, 89, 23);
+
 		tlacidlo2.addActionListener(new ActionListener() {
 
 			@Override
@@ -254,25 +268,38 @@ public class RezervaciaGUI extends JFrame {
 				if (stav == VYBERLET) {
 					let = lety.get(1);
 
+					pokladna.zaratajPlatbuZaCisloLetu(2);
+
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
 					druhLetu = 2;
+					pokladna.zaratajPlatbuZaDruhLetu(2);
+
 					stav = VYBERTYPLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
 					typLetu = 2;
+					pokladna.zaratajPlatbuZaTypLetu(2);
+
 					stav = VYBERTRIEDU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
-					trieda = 2;
+					triedaLetu = 2;
+					pokladna.zaratajPlatbuZaTriedu(2);
+
 					stav = VYBERSEDADLO;
+					klavesnica.setText("");
+					nastavObrazovku();
+
+				} else if (stav == POKRACUJKONIEC) {
+					stav = KONIECPROGRAMU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
@@ -283,6 +310,7 @@ public class RezervaciaGUI extends JFrame {
 		tlacidlo3 = new JButton("3");
 		tlacidlo3.setFont(new Font("Tahoma", Font.BOLD, 15));
 		tlacidlo3.setBounds(282, 218, 89, 23);
+
 		tlacidlo3.addActionListener(new ActionListener() {
 
 			@Override
@@ -303,13 +331,12 @@ public class RezervaciaGUI extends JFrame {
 	}
 
 	private void vytvorObrazovku() {
-		obrazovka = new JTextArea(8, 20);
-		obrazovka.setBounds(40, 80, 330, 200);
-
-		obrazovka.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		obrazovka.setFont(new Font("Serif", Font.ITALIC, 16));
+		obrazovka = new JTextArea(0, 0);
+		obrazovka.setMaximumSize(getMaximumSize());
 		obrazovka.setEditable(false);
 		obrazovka.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		obrazovka.setFont(new Font("Serif", Font.ITALIC, 16));
+
 	}
 
 	private void nastavAtributy() {

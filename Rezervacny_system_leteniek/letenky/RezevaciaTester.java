@@ -116,7 +116,7 @@ public class RezevaciaTester {
 					druh = scanner.nextInt();
 				}
 
-				pokladna.zaratajPlatbu("druh", druh, lety.get(0).getCenaLetu());
+				//pokladna.zaratajPlatbu("druh", druh, lety.get(0).getCenaLetu());
 				int nakup = 0;
 
 				do {
@@ -131,7 +131,7 @@ public class RezevaciaTester {
 						letenka = scanner.nextInt();
 					}
 
-					pokladna.zaratajPlatbu("typ", letenka, 0);
+					//pokladna.zaratajPlatbu("typ", letenka, 0);
 
 					System.out.println("----------------------------------------");
 					lety.get(let - 1).obsadenie();
@@ -144,7 +144,7 @@ public class RezevaciaTester {
 						trieda = scanner.nextInt();
 					}
 
-					pokladna.zaratajPlatbu("trieda", trieda, 0);
+					//pokladna.zaratajPlatbu("trieda", trieda, 0);
 					System.out.println("Vyberte sedadlo: ");
 					int sedadlo = scanner.nextInt();
 
@@ -178,7 +178,7 @@ public class RezevaciaTester {
 						System.out.println("Rezervovali ste si sedadlo.");
 					} else {
 						System.out.println("Sedadlo je obsadené.");
-						pokladna.zaratajPlatbu("typ", letenka, 0);
+						//pokladna.zaratajPlatbu("typ", letenka, 0);
 					}
 
 					System.out.println("----------------------------------------");
