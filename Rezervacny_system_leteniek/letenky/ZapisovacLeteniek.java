@@ -5,31 +5,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 
 public class ZapisovacLeteniek {
 
-    private Zakaznik zakaznik;
-    private Pokladna pokladna;
-    private ArrayList<Zakaznik> pasaziery;
-    private ArrayList<Let> lety;
-    private ArrayList<Rezervacia> rezervacie;
-    private int let, druh, id;
+    public void zapisLetenky(Objednavka objednavka) throws IOException {
 
-    public ZapisovacLeteniek(Zakaznik zakaznik, ArrayList<Let> lety, int let, int druh, ArrayList<Zakaznik> pasaziery,
-	    int id, ArrayList<Rezervacia> rezervacie, Pokladna pokladna) {
-	this.zakaznik = zakaznik;
-	this.pokladna = pokladna;
-	this.pasaziery = pasaziery;
-	this.lety = lety;
-	this.rezervacie = rezervacie;
-	this.let = let;
-	this.druh = druh;
-	this.id = id;
-
-    };
-
-    public void zapisLetenku() throws IOException {
+	var zakaznik = objednavka.getZakaznik();
 
 	/**
 	 * Vytvori subor a nasledne do neho zapise udaje z rezervacie letenky
@@ -38,35 +19,33 @@ public class ZapisovacLeteniek {
 	FileWriter fileWriter = new FileWriter(rezervovanaLetenka);
 	PrintWriter printWriter = new PrintWriter(fileWriter);
 
-	printWriter.println("-----------------------------LETENKA-----------------------------");
-	printWriter.println("Id cislo vasej rezervacie je : " + zakaznik.getId());
-	printWriter.println("Meno zakaznika : " + zakaznik.getMeno() + " " + zakaznik.getPriezvisko());
-	printWriter.println("Adresa : " + zakaznik.getAdresa());
-	printWriter.println("Nazov letu: " + lety.get(let).getNazov() + "\n" + "Cislo letu: #" + let + " | "
-		+ lety.get(let).getCasOdletu() + "\n");
-	if (druh == 1) {
-	    printWriter.println("Druh letu: Jednosmerný let");
-	} else {
-	    printWriter.println("Druh letu: Spiatočný let");
-	}
+	printWriter.println("Id objednavky : " + zakaznik.getId());
+	printWriter.println("Meno : " + zakaznik.getMeno() + " " + zakaznik.getPriezvisko());
+	printWriter.println("Adresa : " + objednavka.getZakaznik().getAdresa());
+	printWriter.println();
+	printWriter.println("K uhrade : " + objednavka.getSuma() + " €");
 	printWriter.println("=================================================================");
 
-	printWriter.println("Cisla rezervovanych sedadiel :");
 
-	for (Zakaznik cestujuci : pasaziery) {
-	    if (cestujuci.getId() == id) {
-		for (Rezervacia rezervacia : rezervacie) {
-		    if ((rezervacia.getZakaznik().getId() == cestujuci.getId()) && (rezervacia.getSedadlo() <= 10)) {
-			printWriter.println("Sedadlo First class cislo: " + rezervacia.getSedadlo() + "\n");
-		    } else if (rezervacia.getZakaznik().getId() == cestujuci.getId()) {
-			printWriter.println("Sedadlo Economy class cislo: " + rezervacia.getSedadlo() + "\n");
-		    }
+	for (Letenka letenka : objednavka.getLetenky()) {
+		var let = letenka.let;
+		printWriter.println("-----------------------------LETENKA-----------------------------");
+		printWriter.println("Meno : " + letenka.menoCestujuceho);
+		printWriter.println("Nazov letu : " + let.getNazov() + " | Čas odletu : " + let.getCasOdletu());
+		printWriter.println("Čislo sedadla : " + letenka.cisloSedadla + " | " + letenka.trieda.toString());
+
+		if (letenka.typPasaziera == TypPasaziera.DOSPELY) {
+			printWriter.println("Dospelý");
+		} else {
+			printWriter.println("Dieťa");
 		}
-	    }
+		if (letenka.spiatocnyLet) {
+			printWriter.println("Druh letu: Spiatočný let");
+		} else {
+			printWriter.println("Druh letu: Jednosmerný let");
+		}
+		printWriter.println("=================================================================\n");
 	}
-
-	printWriter.println("=================================================================");
-	printWriter.println("K uhrade:" + pokladna.getSuma() + " €");
 
 	printWriter.close();
 

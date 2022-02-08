@@ -1,24 +1,25 @@
 package letenky;
 
 public class Letenka {
-    public String nazovLetu;
-    public int cisloSedadla;
-    public double cena;
-    public TypPasaziera typPasaziera;
-    public Trieda trieda;
-    public boolean spiatocnyLet;
+    public final Let let;
+    public final String menoCestujuceho;
+    public final int cisloSedadla;
+    public final TypPasaziera typPasaziera;
+    public final Trieda trieda;
+    public final boolean spiatocnyLet;
+    public final double cena;
 
-    public Letenka(Let let, int cisloSedadla, TypPasaziera typPasaziera, Trieda trieda, boolean spiatocnyLet) {
-        this.nazovLetu = let.getNazov();
+    public Letenka(Let let, String menoCestujuceho, int cisloSedadla, TypPasaziera typPasaziera, Trieda trieda, boolean spiatocnyLet) {
+        this.let = let;
+        this.menoCestujuceho = menoCestujuceho;
         this.cisloSedadla = cisloSedadla;
         this.typPasaziera = typPasaziera;
         this.trieda = trieda;
         this.spiatocnyLet = spiatocnyLet;
-
-        vypocitajSumu(let.getCenaLetu());
+        cena = vypocitajSumu(let.getCenaLetu());
     }
 
-    private void vypocitajSumu (double zakladnaSuma){
+    private double vypocitajSumu (double zakladnaSuma){
         double hodnota = zakladnaSuma;
         if (TypPasaziera.DOSPELY == typPasaziera) {
         hodnota += 4.50;
@@ -31,6 +32,6 @@ public class Letenka {
         if (spiatocnyLet){
             hodnota *= 2;
         }
-        this.cena = hodnota;
+        return hodnota;
     }
 }

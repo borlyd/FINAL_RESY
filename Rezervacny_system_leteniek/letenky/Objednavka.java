@@ -2,16 +2,21 @@ package letenky;
 
 import java.util.ArrayList;
 
-public class Pokladna {
+public class Objednavka {
 
 	private double suma;
-
+	private final Zakaznik zakaznik;
 	private ArrayList <Letenka> letenky = new ArrayList<>();
 
-	public Pokladna() {
+	public Objednavka(Zakaznik zakaznik) {
+		this.zakaznik = zakaznik;
 	}
 
-	 public void pridajLetenku (Letenka letenka){
+	public Zakaznik getZakaznik() {
+		return zakaznik;
+	}
+
+	public void pridajLetenku (Letenka letenka){
 		 letenky.add(letenka);
 		 prepocitajSumu();
 	}

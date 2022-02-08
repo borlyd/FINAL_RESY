@@ -156,13 +156,13 @@
     <panel_attributes>letenky::ZapisovacLeteniek
 --
 -zakaznik: Zakaznik
--pokladna: Pokladna
+-objednavka: Pokladna
 -pasaziery: ArrayList&lt;Zakaznik&gt;
 -lety: ArrayList&lt;Let&gt;
 -rezervacie: ArrayList&lt;Rezervacia&gt;
 -let, druh, id: int
 --
-+ZapisovacLeteniek(Zakaznik zakaznik, ArrayList&lt;Let&gt; lety, int let, int druh, ArrayList&lt;Zakaznik&gt; pasaziery, int id, ArrayList&lt;Rezervacia&gt; rezervacie, Pokladna pokladna): ctor
++ZapisovacLeteniek(Zakaznik zakaznik, ArrayList&lt;Let&gt; lety, int let, int druh, ArrayList&lt;Zakaznik&gt; pasaziery, int id, ArrayList&lt;Rezervacia&gt; rezervacie, Pokladna objednavka): ctor
 +zapisLetenku(): void
 --
 </panel_attributes>

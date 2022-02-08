@@ -2,6 +2,7 @@ package letenky;
 
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,9 +39,10 @@ public class RezervaciaGUI extends JFrame {
 
 	private Stav stav;
 
-	ArrayList<Zakaznik> zakaznik = new ArrayList<Zakaznik>();
+	private ZapisovacLeteniek zapisovac = new ZapisovacLeteniek();
+
 	ArrayList<Let> lety = new ArrayList<Let>();
-	Pokladna pokladna = new Pokladna();
+	Objednavka objednavka;
 
 	String meno;
 	String priezvisko;
@@ -49,6 +51,7 @@ public class RezervaciaGUI extends JFrame {
 	boolean spiatocny; // 1 jednosmerny a 2 obojsmerny
 	TypPasaziera typPasaziera; // 1 dospely a 2 dieta
 	Trieda triedaLetu; // ekonomická a biznis trieda
+	String menoNaLetenke;
 	int cisloSedadla;
 
 	private static Calendar nastavDatumACas(Calendar c, int rok, int mes, int den, int hod, int min, int sec) {
@@ -137,6 +140,9 @@ public class RezervaciaGUI extends JFrame {
 		} else if (stav == VYBERTRIEDU) {
 			obrazovka.setText("Zvolte č. 1 pre biznis triedu a č. 2 pre ekonomickú triedu: ");
 
+		} else if (stav == VYPLNMENOLETENKY) {
+			obrazovka.setText("Vyplnte meno a priezvisko na letenku a potom stláčte č. 1: ");
+
 		} else if (stav == VYBERSEDADLO) {
 			var bs = new StringBuffer();
 			//nadpis pre business class
@@ -185,8 +191,8 @@ public class RezervaciaGUI extends JFrame {
 			var st = new StringBuffer();
 			st.append("Koniec programu.");
 			st.append("----------------------------------------");
-			st.append("Cena: " + pokladna.getSuma() + "€");
-			st.append("ID rezervácie: " + pasazieri.());
+			st.append("Cena: " + objednavka.getSuma() + "€");
+			st.append("ID rezervácie: " + objednavka.getZakaznik().getId());
 			obrazovka.setText(st.toString());
 		}
 
@@ -230,14 +236,11 @@ public class RezervaciaGUI extends JFrame {
 
 				} else if (stav == REGISTRACIAADRESA) {
 					adresa = String.valueOf(klavesnica.getText());
-
 					Random rand = new Random();
-					int id = rand.nextInt(1000);
+					var zakaznik = new Zakaznik(rand.nextInt(1000), meno, priezvisko, adresa);
+					objednavka = new Objednavka(zakaznik);
 
-					Zakaznik zakaznik = new Zakaznik(id, meno, priezvisko, adresa);
-					pasazieri.add(zakaznik);
 					stav = VYBERLET;
-
 					klavesnica.setText("");
 					nastavObrazovku();
 
@@ -268,12 +271,21 @@ public class RezervaciaGUI extends JFrame {
 					triedaLetu = Trieda.BIZNIS;
 
 
-					stav = VYBERSEDADLO;
+					stav = VYPLNMENOLETENKY;
 					klavesnica.setText("");
 					nastavObrazovku();
 
+				} else if (stav == VYPLNMENOLETENKY) {
+					var meno = klavesnica.getText();
+					if (!meno.isEmpty()) {
+						menoNaLetenke = klavesnica.getText();
+						stav = VYBERSEDADLO;
+					}
+
+					klavesnica.setText("");
+					nastavObrazovku();
 				} else if (stav == VYBERSEDADLO) {
-					int zvoleneSedadlo = Integer.valueOf(klavesnica.getText());
+					int zvoleneSedadlo = Integer.parseInt(klavesnica.getText());
 
 					if (let.getSedadla().get(zvoleneSedadlo - 1).getObsadene()) {
 						stav = OBSADENESEDADLO;
@@ -281,8 +293,8 @@ public class RezervaciaGUI extends JFrame {
 						cisloSedadla = zvoleneSedadlo;
 						let.getSedadla().get(zvoleneSedadlo-1).setObsadene(true);
 
-						Letenka letenka = new Letenka(let, cisloSedadla, typPasaziera, triedaLetu, spiatocny);
-						pokladna.pridajLetenku(letenka);
+						Letenka letenka = new Letenka(let, menoNaLetenke, cisloSedadla, typPasaziera, triedaLetu, spiatocny);
+						objednavka.pridajLetenku(letenka);
 
 						stav = POKRACUJKONIEC;
 					}
@@ -348,10 +360,12 @@ public class RezervaciaGUI extends JFrame {
 					nastavObrazovku();
 
 				} else if (stav == KONIECPROGRAMU) {
-
-					ZapisovacLeteniek zapisovac = new ZapisovacLeteniek(zakaznik, lety, let, druh, pasaziery, id,
-							rezervacie, pokladna);
-					zapisovac.zapisLetenku();
+					try {
+						zapisovac.zapisLetenky(objednavka);
+					} catch (IOException ex) {
+						ex.printStackTrace();
+						System.exit(-1);
+					}
 				}
 			}
 		});

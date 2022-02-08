@@ -26,7 +26,7 @@ public class RezevaciaTester {
 		ArrayList<Zakaznik> pasaziery = new ArrayList<Zakaznik>();
 		ArrayList<Let> lety = new ArrayList<Let>();
 		ArrayList<Rezervacia> rezervacie = new ArrayList<Rezervacia>();
-		Pokladna pokladna = new Pokladna();
+		Objednavka objednavka = new Objednavka(pasaziery.get(0)); // TODO toto je nedokoncene
 
 		Calendar c = Calendar.getInstance(); // https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
 
@@ -195,12 +195,11 @@ public class RezevaciaTester {
 				} while (nakup == 1);
 
 				System.out.println("----------------------------------------");
-				System.out.println("Cena: " + pokladna.getSuma() + "€");
+				System.out.println("Cena: " + objednavka.getSuma() + "€");
 				System.out.println("ID rezervácie: " + zakaznik.getId());
 
-				ZapisovacLeteniek zapisovac = new ZapisovacLeteniek(zakaznik, lety, let, druh, pasaziery, id,
-						rezervacie, pokladna);
-				zapisovac.zapisLetenku();
+				ZapisovacLeteniek zapisovac = new ZapisovacLeteniek();
+				zapisovac.zapisLetenky(objednavka);
 
 			}
 
