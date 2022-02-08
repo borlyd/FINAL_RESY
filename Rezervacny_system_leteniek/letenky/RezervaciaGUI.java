@@ -1,5 +1,7 @@
 package letenky;
 
+import jdk.internal.access.JavaIOFileDescriptorAccess;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -38,16 +40,15 @@ public class RezervaciaGUI extends JFrame {
 
 	ArrayList<Zakaznik> pasazieri = new ArrayList<Zakaznik>();
 	ArrayList<Let> lety = new ArrayList<Let>();
-	ArrayList<Rezervacia> rezervacie = new ArrayList<Rezervacia>();
 	Pokladna pokladna = new Pokladna();
 
 	String meno;
 	String priezvisko;
 	String adresa;
 	Let let;
-	int druhLetu; // 1 jednosmerny a 2 obojsmerny
-	int typLetu; // 1 dospely a 2 dieta
-	int triedaLetu; // ekonomická a biznis trieda
+	boolean spiatocny; // 1 jednosmerny a 2 obojsmerny
+	TypPasaziera typPasaziera; // 1 dospely a 2 dieta
+	Trieda triedaLetu; // ekonomická a biznis trieda
 	int cisloSedadla;
 
 	private static Calendar nastavDatumACas(Calendar c, int rok, int mes, int den, int hod, int min, int sec) {
@@ -81,15 +82,15 @@ public class RezervaciaGUI extends JFrame {
 
 		c = nastavDatumACas(c, 2022, 02, 12, 2, 30, 0);
 		Date d1 = c.getTime();
-		lety.add(new Let("Mnichov", 80, d1));
+		lety.add(new Let("Mníchov", 80, d1, 50, 10));
 
 		c = nastavDatumACas(c, 2022, 01, 14, 5, 0, 0);
 		Date d2 = c.getTime();
-		lety.add(new Let("Londyn", 100, d2));
+		lety.add(new Let("Londýn", 100, d2, 100, 30));
 
 		c = nastavDatumACas(c, 2022, 05, 22, 3, 30, 0);
 		Date d3 = c.getTime();
-		lety.add(new Let("Barcelona", 120, d3));
+		lety.add(new Let("Barcelona", 120, d3, 40, 10));
 
 	}
 
@@ -119,8 +120,9 @@ public class RezervaciaGUI extends JFrame {
 			for (int i = 0; i < lety.size(); i++) {
 				int cisloLetu = i + 1;
 				sb.append("Let č.: " + cisloLetu + "\n");
-				sb.append("Nazov letu: " + lety.get(i).getNazov() + "\n" + " cena letu: " + lety.get(i).getCenaLetu()
-						+ " | " + lety.get(i).getCasOdletu());
+				sb.append("Názov letu: " + lety.get(i).getNazov() + "\n" + "Cena letu: " + lety.get(i).getCenaLetu()
+						+ " | " + "\n" + "Čas odletu: " + lety.get(i).getCasOdletu() + "\n");
+				sb.append("\n");
 			}
 			sb.append("  \n" + "Zadajte č. letu: \n" + "\n");
 
@@ -136,7 +138,34 @@ public class RezervaciaGUI extends JFrame {
 			obrazovka.setText("Zvolte č. 1 pre biznis triedu a č. 2 pre ekonomickú triedu: ");
 
 		} else if (stav == VYBERSEDADLO) {
-			obrazovka.setText("Vyberte si číslo sedadla:  \n" + "Potvrďte kliknutím na 1 = OK");
+			var bs = new StringBuffer();
+			//nadpis pre business class
+			bs.append("============Business CLASS============\n");
+			// vypisat cisla pre business class
+			for (int i = 1; i <= let.getBiznisObsadenie(); i++) {
+				//vypytat spravne sedadlo
+				Sedadlo sedadlo = let.getSedadla().get(i);
+				bs.append(sedadlo.getObsadene() ? "X": i);
+				bs.append(" ");
+				if (i % 10 == 0){
+					bs.append("\n");
+				}
+			}
+			// nadpis pre ekonomicku triedu
+			bs.append("============Economy CLASS============\n");
+			//vypisat cisla pre ekonomicku triedu
+			for (int i = let.getBiznisObsadenie() + 1; i <= let.getObsadenie(); i++) {
+				//vypytat spravne sedadlo
+				Sedadlo sedadlo = let.getSedadla().get(i);
+				bs.append(sedadlo.getObsadene() ? "X": i);
+				bs.append(" ");
+				if (i % 10 == 0){
+					bs.append("\n");
+				}
+			}
+			bs.append("Vyberte si číslo sedadla:  \n" + "Potvrďte kliknutím na 1 = OK");
+				obrazovka.setText(bs.toString());
+
 
 		} else if (stav == POKRACUJKONIEC) {
 			obrazovka.setText("Zvoľte č. 1 ak chcete rezervovať ďalšie sedadlo alebo č. 2 ak chcete zaplatiť:");
@@ -209,34 +238,29 @@ public class RezervaciaGUI extends JFrame {
 				} else if (stav == VYBERLET) {
 					let = lety.get(0);
 
-					pokladna.zaratajPlatbuZaCisloLetu(let);
-
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
-					druhLetu = 1;
+					spiatocny = false;
 
-					pokladna.zaratajPlatbuZaDruhLetu(1);
 
 					stav = VYBERTYPLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
-					typLetu = 1;
+					typPasaziera = TypPasaziera.DOSPELY;
 
-					pokladna.zaratajPlatbuZaTypLetu(1);
 					stav = VYBERTRIEDU;
 
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
-					triedaLetu = 1;
+					triedaLetu = Trieda.BIZNIS;
 
-					pokladna.zaratajPlatbuZaTriedu(1);
 
 					stav = VYBERSEDADLO;
 					klavesnica.setText("");
@@ -244,6 +268,9 @@ public class RezervaciaGUI extends JFrame {
 
 				} else if (stav == VYBERSEDADLO) {
 					cisloSedadla = Integer.valueOf(klavesnica.getText());
+
+					Letenka letenka = new Letenka(let, cisloSedadla, typPasaziera, triedaLetu, spiatocny);
+					pokladna.pridajLetenku(letenka);
 
 					stav = POKRACUJKONIEC;
 					klavesnica.setText("");
@@ -268,31 +295,27 @@ public class RezervaciaGUI extends JFrame {
 				if (stav == VYBERLET) {
 					let = lety.get(1);
 
-					pokladna.zaratajPlatbuZaCisloLetu(let);
-
 					stav = VYBERDRUHLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
-					druhLetu = 2;
-					pokladna.zaratajPlatbuZaDruhLetu(2);
+					spiatocny = true;
 
 					stav = VYBERTYPLETU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
-					typLetu = 2;
-					pokladna.zaratajPlatbuZaTypLetu(2);
+					typPasaziera = TypPasaziera.DIETA;
+
 
 					stav = VYBERTRIEDU;
 					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
-					triedaLetu = 2;
-					pokladna.zaratajPlatbuZaTriedu(2);
+					triedaLetu = Trieda.EKONOMICKA;
 
 					stav = VYBERSEDADLO;
 					klavesnica.setText("");

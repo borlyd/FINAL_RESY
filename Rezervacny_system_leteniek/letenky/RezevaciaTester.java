@@ -32,15 +32,15 @@ public class RezevaciaTester {
 
 		c = nastavDatumACas(c, 2022, 02, 12, 2, 30, 0);
 		Date d1 = c.getTime();
-		lety.add(new Let("Mnichov", 80, d1));
+		lety.add(new Let("Mnichov", 80, d1, 50, 10));
 
 		c = nastavDatumACas(c, 2022, 01, 14, 5, 0, 0);
 		Date d2 = c.getTime();
-		lety.add(new Let("Londyn", 100, d2));
+		lety.add(new Let("Londyn", 100, d2, 100, 30));
 
 		c = nastavDatumACas(c, 2022, 05, 22, 3, 30, 0);
 		Date d3 = c.getTime();
-		lety.add(new Let("Barcelona", 120, d3));
+		lety.add(new Let("Barcelona", 120, d3, 40, 10));
 
 		System.out.println("----------------------------------------");
 		System.out.println("Rezervacia leteniek");
@@ -70,7 +70,7 @@ public class RezevaciaTester {
 			}
 
 			if (moznost == 1) {
-				pokladna.resetCeny();
+				//pokladna.resetCeny();
 				System.out.println("----------------------------------------");
 				System.out.println("Zadali ste rezerváciu");
 				System.out.println("----------------------------------------");
@@ -205,7 +205,7 @@ public class RezevaciaTester {
 			}
 
 			if (moznost == 2) {
-				pokladna.resetCeny();
+				//pokladna.resetCeny();
 				System.out.println("----------------------------------------");
 				System.out.println("Zadali ste zrušenie rezervácie");
 				System.out.println("----------------------------------------");

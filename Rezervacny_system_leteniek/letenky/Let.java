@@ -6,21 +6,35 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class Let {
-    private String nazov;
+	private String nazov;
 	private Date casOdletu;
-    private int obsadenie = 50;
-    private double cenaLetu;
-    private ArrayList<Sedadlo> sedadla;
+
+
+
+	private int obsadenie;
+	private int biznisObsadenie;
+	private double cenaLetu;
+	private ArrayList<Sedadlo> sedadla;
 	private SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 
-    public Let(String nazov, double cenaLetu, Date d1) {
-	this.nazov = nazov;
-	this.cenaLetu = cenaLetu;
-	this.casOdletu = d1;
-	sedadla = new ArrayList<Sedadlo>();
-	vytvorSedadla(this.obsadenie);
+
+
+	public Let(String nazov, double cenaLetu, Date d1, int obsadenie, int biznisObsadenie) {
+		this.biznisObsadenie = biznisObsadenie;
+		this.obsadenie = obsadenie;
+		this.nazov = nazov;
+		this.cenaLetu = cenaLetu;
+		this.casOdletu = d1;
+		sedadla = new ArrayList<Sedadlo>();
+		vytvorSedadla(this.obsadenie);
     }
 
+	public int getObsadenie() {
+		return obsadenie;
+	}
+	public int getBiznisObsadenie() {
+		return biznisObsadenie;
+	}
     public String getNazov() {
 	return nazov;
     }

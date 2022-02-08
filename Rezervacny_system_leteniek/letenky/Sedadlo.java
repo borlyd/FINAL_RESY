@@ -27,6 +27,8 @@ public class Sedadlo {
     }
 
     public int getCislo() {
-		return cislo;
+        return cislo;
 	}
-}
+
+    }
+
