@@ -1,23 +1,18 @@
 package letenky;
 
 
-
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import static letenky.Stav.*;
 import java.util.Random;
 
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import static letenky.Stav.*;
 
-import java.awt.event.*;
-import java.awt.*;
 
 public class RezervaciaGUI extends JFrame {
 
@@ -76,8 +71,9 @@ public class RezervaciaGUI extends JFrame {
 
 		setLayout(new FlowLayout());
 
-		add(klavesnica);
+
 		add(obrazovka);
+		add(klavesnica);
 		add(panelTlacidiel);
 		nastavObrazovku();
 
@@ -101,47 +97,59 @@ public class RezervaciaGUI extends JFrame {
 
 		if (stav == START) {
 			obrazovka.setText(
-					"Rezervácia leteniek\n" + "\n" + "Ceny:\n" + "Klasický lístok: 4,50€\n" + "Detský lístok: 3€\n"
-							+ "\n" + "- Zadajte 1 pre rezerváciu\n" + "- Zadajte 2 pre zrušenie rezervácie\n"
-							+ "- Zadajte 3 pre ukončenie\n" + "\n" + "Zadajte možnosť:\n");
+
+					"========================\n" +  "   Rezervácia leteniek   \n" + "========================\n"
+							+ " - Zadajte 1 pre rezerváciu\n" + " - Zadajte 2 pre zrušenie rezervácie  \n"
+							+ " - Zadajte 3 pre ukončenie" );
 
 		} else if (stav == REGISTRACIAMENO) {
 			obrazovka.setText(
-					"Zadali ste rezerváciu\n" + "\n" + "Zadajte svoje meno: \n" + "Potvrďte kliknutím na 1 = OK");
+					"========================\n" + "   Zadali ste rezerváciu. \n" + "========================\n"
+							+ " Zadajte svoje MENO\n a potvrďte kliknutím na 1. ");
+
 
 		} else if (stav == REGISTRACIAPRIEZVISKO) {
-			obrazovka.setText("Zadajte svoje priezvisko:  \n" + "Potvrďte kliknutím na 1 = OK");
+			obrazovka.setText("========================\n" + "   Zadali ste svoje meno. \n" + "========================\n"
+					+ " Zadajte svoje PRIEZVISKO.\n a potvrďte kliknutím na 1. ");
 
 		} else if (stav == REGISTRACIAADRESA) {
-			obrazovka.setText("Zadajte svoju adresu:  \n" + "Potvrďte kliknutím na 1 = OK");
+			obrazovka.setText("========================\n" + "   Zadali ste priezvisko. \n" + "========================\n"
+					+ " Zadajte svoju ADRESU.\n " + "Potvrďte kliknutím na 1. ");
 
 		} else if (stav == VYBERLET) {
 			var sb = new StringBuffer();
 
-			sb.append(" \n" + "Vyberte let\n" + "\n");
+			sb.append( "==================================\n" +"	VYBERTE SI LET\n"
+					+ "==================================\n");
 
 			for (int i = 0; i < lety.size(); i++) {
 				int cisloLetu = i + 1;
-				sb.append("Let č.: " + cisloLetu + "\n");
-				sb.append("Názov letu: " + lety.get(i).getNazov() + "\n" + "Cena letu: " + lety.get(i).getCenaLetu()
-						+ " | " + "\n" + "Čas odletu: " + lety.get(i).getCasOdletu() + "\n");
+				sb.append(" Let č.: " + cisloLetu + "\n");
+				sb.append(" Názov letu: " + lety.get(i).getNazov() + "\n" + " Cena letu: " + lety.get(i).getCenaLetu()
+						+ " | " + "Čas odletu: " + lety.get(i).getCasOdletu() + "\n");
 				sb.append("\n");
+
 			}
-			sb.append("  \n" + "Zadajte č. letu: \n" + "\n");
+			sb.append("==================================\n");
+			sb.append( " ZVOĽTE č. letu (1, 2, 3): \n");
 
 			obrazovka.setText(sb.toString());
 
 		} else if (stav == VYBERDRUHLETU) {
-			obrazovka.setText("Zadajte č. 1 pre jednosmerný let alebo č. 2 pre spiatocny let: ");
+			obrazovka.setText("========================\n" + " Stlačte 1 pre jednosmerný let \n alebo 2 pre spiatocny let: "
+					+ "\n" + "========================\n");
 
 		} else if (stav == VYBERTYPLETU) {
-			obrazovka.setText("Zvolte č. 1 pre klasický lístok a č. 2 pre detský lístok: ");
+			obrazovka.setText("========================\n" + " Stlačte 1 pre klasický lístok \n alebo 2 pre detský lístok: "
+					+ "\n" + "========================\n");
 
 		} else if (stav == VYBERTRIEDU) {
-			obrazovka.setText("Zvolte č. 1 pre biznis triedu a č. 2 pre ekonomickú triedu: ");
+			obrazovka.setText("========================\n" + " Stlačte 1 pre biznis triedu \n alebo 2 pre ekonomickú triedu: "
+					+ "\n" + "========================\n");
 
 		} else if (stav == VYPLNMENOLETENKY) {
-			obrazovka.setText("Vyplnte meno a priezvisko na letenku a potom stláčte č. 1: ");
+			obrazovka.setText("==========================\n" + " Vyplňte MENO a PRIEZVISKO na letenku \n a potvrďte stlačením na tlačidlo 1: "
+					+ "\n" + "==========================\n");
 
 		} else if (stav == VYBERSEDADLO) {
 			var bs = new StringBuffer();
@@ -169,30 +177,40 @@ public class RezervaciaGUI extends JFrame {
 					bs.append("\n");
 				}
 			}
-			bs.append("Vyberte si číslo sedadla:  \n" + "Potvrďte kliknutím na 1 = OK");
+			bs.append("==================================\n" + "Vyberte si číslo sedadla\n" +
+					" a potvrďte kliknutím na 1. \n"
+					+ "==================================\n");
 				obrazovka.setText(bs.toString());
 
 		} else if (stav == OBSADENESEDADLO) {
-			obrazovka.setText("Toto sedadlo je obsadené. Prosím, vyberte si zo sedadiel, ktoré nie sú obsadené. Stlačte 1 na pokračovanie. ");
+			obrazovka.setText("========================\n" + "Toto sedadlo je obsadené.\n" +
+					" Prosím, vyberte si zo sedadiel, ktoré nie sú obsadené.\n" +
+					" Potvrďte kliknutím na 1." + "========================\n");
 
 		} else if (stav == POKRACUJKONIEC) {
-			obrazovka.setText("Zvoľte č. 1 ak chcete rezervovať ďalšie sedadlo alebo č. 2 ak chcete zaplatiť:");
+			obrazovka.setText("=============================\n"
+					+ " Zvoľte 1, ak chcete rezervovať ďalšie sedadlo \n"
+					+ " alebo č. 2 ak chcete zaplatiť.\n "
+					+ "=============================\n");
 
 		} else if (stav == ZRUSENIEREGISTRACIE) {
-			obrazovka.setText("Zadali ste zrušenie rezervácie");
+			obrazovka.setText(" Zadali ste zrušenie rezervácie ");
 
 		} else if (stav == IDREGISTRACIE) {
-			obrazovka.setText("Zadajte vaše ID rezervácie");
+			obrazovka.setText(" Zadajte vaše ID rezervácie ");
 
 		} else if (stav == REGISTRACIAZRUSENA) {
-			obrazovka.setText("Zrušili ste rezerváciu.");
+			obrazovka.setText(" Zrušili ste rezerváciu. ");
 
 		} else if (stav == KONIECPROGRAMU) {
 			var st = new StringBuffer();
-			st.append("Koniec programu.");
-			st.append("----------------------------------------");
-			st.append("Cena: " + objednavka.getSuma() + "€");
-			st.append("ID rezervácie: " + objednavka.getZakaznik().getId());
+			st.append("========================\n");
+			st.append("            Koniec programu. \n");
+			st.append("========================\n");
+			st.append(" Cena: " + objednavka.getSuma() + "€\n");
+			st.append(" ID rezervácie: " + objednavka.getZakaznik().getId() + "\n");
+			st.append("========================\n");
+			st.append(" Stlačte 2 pre vygenerovanie letenky.\n");
 			obrazovka.setText(st.toString());
 		}
 
@@ -210,7 +228,7 @@ public class RezervaciaGUI extends JFrame {
 
 	private void vytvorTlacidla() {
 		tlacidlo1 = new JButton("1");
-		tlacidlo1.setFont(new Font("Tahoma", Font.BOLD, 15));
+		tlacidlo1.setFont(new Font("Tahoma", Font.BOLD, 20));
 		tlacidlo1.setBounds(282, 84, 89, 23);
 
 		tlacidlo1.addActionListener(new ActionListener() {
@@ -270,7 +288,6 @@ public class RezervaciaGUI extends JFrame {
 				} else if (stav == VYBERTRIEDU) {
 					triedaLetu = Trieda.BIZNIS;
 
-
 					stav = VYPLNMENOLETENKY;
 					klavesnica.setText("");
 					nastavObrazovku();
@@ -318,8 +335,8 @@ public class RezervaciaGUI extends JFrame {
 		});
 
 		tlacidlo2 = new JButton("2");
-		tlacidlo2.setFont(new Font("Tahoma", Font.BOLD, 15));
-		tlacidlo2.setBounds(282, 155, 89, 23);
+		tlacidlo2.setFont(new Font("Tahoma", Font.BOLD, 20));
+		tlacidlo2.setBounds(200, 155, 89, 23);
 
 		tlacidlo2.addActionListener(new ActionListener() {
 
@@ -362,7 +379,7 @@ public class RezervaciaGUI extends JFrame {
 				} else if (stav == KONIECPROGRAMU) {
 					try {
 						zapisovac.zapisLetenky(objednavka);
-					} catch (IOException ex) {
+					}catch (IOException ex) {
 						ex.printStackTrace();
 						System.exit(-1);
 					}
@@ -371,15 +388,15 @@ public class RezervaciaGUI extends JFrame {
 		});
 
 		tlacidlo3 = new JButton("3");
-		tlacidlo3.setFont(new Font("Tahoma", Font.BOLD, 15));
-		tlacidlo3.setBounds(282, 218, 89, 23);
+		tlacidlo3.setFont(new Font("Tahoma", Font.BOLD, 20));
+		tlacidlo3.setBounds(282, 215, 89, 23);
 
 		tlacidlo3.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (stav == KONIECPROGRAMU) {
-					klavesnica.setText("");
+				if (stav == START) {
+					stav = KONIECPROGRAMU;
 					nastavObrazovku();
 
 				} else if (stav == VYBERLET) {
@@ -395,10 +412,10 @@ public class RezervaciaGUI extends JFrame {
 
 	private void vytvorObrazovku() {
 		obrazovka = new JTextArea(0, 0);
-		obrazovka.setMaximumSize(getMaximumSize());
+		obrazovka.setSize(450, 200);
 		obrazovka.setEditable(false);
 		obrazovka.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		obrazovka.setFont(new Font("Serif", Font.ITALIC, 16));
+		obrazovka.setFont(new Font("Serif", Font.ITALIC, 20));
 
 	}
 

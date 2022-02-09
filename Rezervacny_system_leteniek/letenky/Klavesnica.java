@@ -1,9 +1,7 @@
 package letenky;
 
-import java.awt.BorderLayout;
-
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.awt.*;
 
 public class Klavesnica extends JPanel {
 
@@ -20,9 +18,9 @@ public class Klavesnica extends JPanel {
 		// vytvorTlacidloBodka();
 		// vytvorTlacidloCE();
 
-		setLayout(new BorderLayout());
+		setLayout(new FlowLayout());
 
-		add(textovePole, BorderLayout.NORTH);
+		add(textovePole, BorderLayout.SOUTH);
 		// add(panelTlacidiel);
 	}
 
@@ -82,8 +80,8 @@ public class Klavesnica extends JPanel {
 	 * 
 	 */
 	private void vytvorTextovePole() {
-		textovePole = new JTextField(50);
-		textovePole.setBounds(50, 100, 200, 30);
+		textovePole = new JTextField(35);
+		textovePole.setBounds(200, 100, 50, 50);
 	}
 
 }
