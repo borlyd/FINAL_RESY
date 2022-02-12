@@ -36,7 +36,9 @@ public class RezervaciaGUI extends JFrame {
 
 	private ZapisovacLeteniek zapisovac = new ZapisovacLeteniek();
 
+	ArrayList<Zakaznik> pasazieri = new ArrayList<Zakaznik>();
 	ArrayList<Let> lety = new ArrayList<Let>();
+	ArrayList<Rezervacia> rezervacie = new ArrayList<Rezervacia>();
 	Objednavka objednavka;
 
 	String meno;
@@ -99,9 +101,9 @@ public class RezervaciaGUI extends JFrame {
 			obrazovka.setText(
 
 					"========================\n" +  "   Rezervácia leteniek   \n" + "========================\n"
-							+ " - Zadajte 1 pre rezerváciu\n" + " - Zadajte 2 pre zrušenie rezervácie  \n"
-							+ " - Zadajte 3 pre ukončenie" );
-
+							+ " - Zadajte 1 pre rezerváciu\n"
+							+ " - Zadajte 2 pre zrušenie rezervácie\n"
+							+ " - Zadajte 3 pre ukončenie programu\n");
 		} else if (stav == REGISTRACIAMENO) {
 			obrazovka.setText(
 					"========================\n" + "   Zadali ste rezerváciu. \n" + "========================\n"
@@ -187,30 +189,35 @@ public class RezervaciaGUI extends JFrame {
 					" Prosím, vyberte si zo sedadiel, ktoré nie sú obsadené.\n" +
 					" Potvrďte kliknutím na 1." + "========================\n");
 
-		} else if (stav == POKRACUJKONIEC) {
+		} else if (stav == POKRACUJZAPLATIT) {
 			obrazovka.setText("=============================\n"
 					+ " Zvoľte 1, ak chcete rezervovať ďalšie sedadlo \n"
 					+ " alebo č. 2 ak chcete zaplatiť.\n "
 					+ "=============================\n");
 
-		} else if (stav == ZRUSENIEREGISTRACIE) {
-			obrazovka.setText(" Zadali ste zrušenie rezervácie ");
-
-		} else if (stav == IDREGISTRACIE) {
-			obrazovka.setText(" Zadajte vaše ID rezervácie ");
+		} else if (stav == ZRUSITIDREGISTRACIE) {
+			obrazovka.setText(" Zadali ste zrušenie rezervácie.\n "
+					+ "================================\n"
+					+ " Pre zrušenie zadajte ID Vašej rezervácie.\n "
+					+ "Potvrďte stlačením 1. ");
 
 		} else if (stav == REGISTRACIAZRUSENA) {
-			obrazovka.setText(" Zrušili ste rezerváciu. ");
+			obrazovka.setText(" Vaša registrácia bola zrušená. \n "
+					+ "========================\n"
+					+ " - Zadajte 1 pre novú rezerváciu\n"
+					+ " - Zadajte 2 pre zrušenie rezervácie\n"
+					+ " - Zadajte 3 pre ukončenie programu\n");
 
-		} else if (stav == KONIECPROGRAMU) {
+
+		} else if (stav == ZAPLATIT) {
 			var st = new StringBuffer();
-			st.append("========================\n");
-			st.append("            Koniec programu. \n");
-			st.append("========================\n");
+
 			st.append(" Cena: " + objednavka.getSuma() + "€\n");
 			st.append(" ID rezervácie: " + objednavka.getZakaznik().getId() + "\n");
 			st.append("========================\n");
-			st.append(" Stlačte 2 pre vygenerovanie letenky.\n");
+			st.append(" - Zadajte 1 pre rezerváciu\n"
+					+ " - Zadajte 2 pre zrušenie rezervácie\n"
+					+ " - Zadajte 3 pre ukončenie programu\n");
 			obrazovka.setText(st.toString());
 		}
 
@@ -313,7 +320,7 @@ public class RezervaciaGUI extends JFrame {
 						Letenka letenka = new Letenka(let, menoNaLetenke, cisloSedadla, typPasaziera, triedaLetu, spiatocny);
 						objednavka.pridajLetenku(letenka);
 
-						stav = POKRACUJKONIEC;
+						stav = POKRACUJZAPLATIT;
 					}
 
 
@@ -326,8 +333,38 @@ public class RezervaciaGUI extends JFrame {
 					klavesnica.setText("");
 					nastavObrazovku();
 
-				} else if (stav == POKRACUJKONIEC) {
+				} else if (stav == POKRACUJZAPLATIT) {
 					stav = VYBERLET;
+					klavesnica.setText("");
+					nastavObrazovku();
+				}
+				else if (stav == ZAPLATIT) {
+
+					stav = START;
+					klavesnica.setText("");
+					nastavObrazovku();
+				}
+				else if (stav == ZRUSITIDREGISTRACIE) {
+					int id = Integer.parseInt(klavesnica.getText());
+					stav = REGISTRACIAZRUSENA;
+					klavesnica.setText("");
+					nastavObrazovku();
+
+					for (Zakaznik zakaznik : pasazieri) {
+						if (zakaznik.getId() == id) {
+							for (Rezervacia rezervacia : rezervacie) {
+								if (rezervacia.getZakaznik().getId() == zakaznik.getId()) {
+									objednavka.reset();
+								}
+							}
+						}
+					}
+
+
+				}
+				else if (stav == REGISTRACIAZRUSENA) {
+
+					stav = REGISTRACIAMENO;
 					klavesnica.setText("");
 					nastavObrazovku();
 				}
@@ -342,7 +379,12 @@ public class RezervaciaGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (stav == VYBERLET) {
+				 if (stav == START) {
+					stav = ZRUSITIDREGISTRACIE;
+					klavesnica.setText("");
+					nastavObrazovku();
+
+				} else if (stav == VYBERLET) {
 					let = lety.get(1);
 
 					stav = VYBERDRUHLETU;
@@ -371,19 +413,28 @@ public class RezervaciaGUI extends JFrame {
 					klavesnica.setText("");
 					nastavObrazovku();
 
-				} else if (stav == POKRACUJKONIEC) {
-					stav = KONIECPROGRAMU;
-					klavesnica.setText("");
-					nastavObrazovku();
-
-				} else if (stav == KONIECPROGRAMU) {
+				} else if (stav == POKRACUJZAPLATIT) {
+					stav = ZAPLATIT;
 					try {
 						zapisovac.zapisLetenky(objednavka);
 					}catch (IOException ex) {
 						ex.printStackTrace();
 						System.exit(-1);
 					}
+					klavesnica.setText("");
+					nastavObrazovku();
+
+				//} else if (stav == ZAPLATIT) {
+				//	stav = ZRUSITIDREGISTRACIE;
+				//	klavesnica.setText("");
+				//	nastavObrazovku();
 				}
+				 else if (stav == REGISTRACIAZRUSENA) {
+
+					 stav = ZRUSITIDREGISTRACIE;
+					 klavesnica.setText("");
+					 nastavObrazovku();
+				 }
 			}
 		});
 
@@ -397,12 +448,27 @@ public class RezervaciaGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (stav == START) {
 					stav = KONIECPROGRAMU;
+					System.exit(0);
+					klavesnica.setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERLET) {
 					let = lety.get(2);
 
 					stav = VYBERDRUHLETU;
+					klavesnica.setText("");
+					nastavObrazovku();
+				}
+				else if (stav == ZAPLATIT) {
+					stav = KONIECPROGRAMU;
+					System.exit(0);
+					klavesnica.setText("");
+					nastavObrazovku();
+				}
+
+				else if (stav == REGISTRACIAZRUSENA) {
+					stav = KONIECPROGRAMU;
+					System.exit(0);
 					klavesnica.setText("");
 					nastavObrazovku();
 				}
