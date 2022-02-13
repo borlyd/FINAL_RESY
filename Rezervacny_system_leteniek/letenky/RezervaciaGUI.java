@@ -26,11 +26,11 @@ public class RezervaciaGUI extends JFrame {
 	private static final int SIRKA = 600;
 	private static final int VYSKA = 400;
 	private JTextArea obrazovka;
-	private Klavesnica klavesnica;
 	private JButton tlacidlo1;
 	private JButton tlacidlo2;
 	private JButton tlacidlo3;
 	private JPanel panelTlacidiel;
+	private JTextField textovePole;
 
 	private Stav stav;
 
@@ -65,19 +65,19 @@ public class RezervaciaGUI extends JFrame {
 
 		this.stav = START;
 
-		klavesnica = new Klavesnica();
 		nastavAtributy();
 		vytvorObrazovku();
 		vytvorTlacidla();
 		vytvorPanelTlacidiel();
+		vytvorTextovePole();
 
 		setLayout(new FlowLayout());
 
 
 		add(obrazovka);
-		add(klavesnica);
 		add(panelTlacidiel);
 		nastavObrazovku();
+		add(textovePole, BorderLayout.SOUTH);
 
 		Calendar c = Calendar.getInstance(); // https://docs.oracle.com/javase/7/docs/api/java/util/Calendar.html
 
@@ -95,6 +95,18 @@ public class RezervaciaGUI extends JFrame {
 
 	}
 
+	public void setText(String text) {
+		textovePole.setText(text);
+	}
+
+	public String getText() {
+		return textovePole.getText();
+	}
+
+	private void vytvorTextovePole() {
+		textovePole = new JTextField(35);
+		textovePole.setBounds(200, 100, 50, 50);
+	}
 	private void nastavObrazovku() {
 
 		if (stav == START) {
@@ -248,32 +260,32 @@ public class RezervaciaGUI extends JFrame {
 					nastavObrazovku();
 
 				} else if (stav == REGISTRACIAMENO) {
-					meno = String.valueOf(klavesnica.getText());
+					meno = String.valueOf(getText());
 					stav = REGISTRACIAPRIEZVISKO;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == REGISTRACIAPRIEZVISKO) {
-					priezvisko = String.valueOf(klavesnica.getText());
+					priezvisko = String.valueOf(getText());
 					stav = REGISTRACIAADRESA;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == REGISTRACIAADRESA) {
-					adresa = String.valueOf(klavesnica.getText());
+					adresa = String.valueOf(getText());
 					Random rand = new Random();
 					var zakaznik = new Zakaznik(rand.nextInt(1000), meno, priezvisko, adresa);
 					objednavka = new Objednavka(zakaznik);
 
 					stav = VYBERLET;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERLET) {
 					let = lety.get(0);
 
 					stav = VYBERDRUHLETU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
@@ -281,7 +293,7 @@ public class RezervaciaGUI extends JFrame {
 
 
 					stav = VYBERTYPLETU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
@@ -289,27 +301,27 @@ public class RezervaciaGUI extends JFrame {
 
 					stav = VYBERTRIEDU;
 
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
 					triedaLetu = Trieda.BIZNIS;
 
 					stav = VYPLNMENOLETENKY;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYPLNMENOLETENKY) {
-					var meno = klavesnica.getText();
+					var meno = getText();
 					if (!meno.isEmpty()) {
-						menoNaLetenke = klavesnica.getText();
+						menoNaLetenke = getText();
 						stav = VYBERSEDADLO;
 					}
 
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				} else if (stav == VYBERSEDADLO) {
-					int zvoleneSedadlo = Integer.parseInt(klavesnica.getText());
+					int zvoleneSedadlo = Integer.parseInt(getText());
 
 					if (let.getSedadla().get(zvoleneSedadlo - 1).getObsadene()) {
 						stav = OBSADENESEDADLO;
@@ -325,30 +337,30 @@ public class RezervaciaGUI extends JFrame {
 					}
 
 
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 				else if (stav == OBSADENESEDADLO)  {
 
 					stav = VYBERSEDADLO;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == POKRACUJZAPLATIT) {
 					stav = VYBERLET;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 				else if (stav == ZAPLATIT) {
 
 					stav = START;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 				else if (stav == ZRUSITIDREGISTRACIE) {
-					int id = Integer.parseInt(klavesnica.getText());
+					int id = Integer.parseInt(getText());
 					stav = REGISTRACIAZRUSENA;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 					for (Zakaznik zakaznik : pasazieri) {
@@ -366,7 +378,7 @@ public class RezervaciaGUI extends JFrame {
 				else if (stav == REGISTRACIAZRUSENA) {
 
 					stav = REGISTRACIAMENO;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 			}
@@ -382,21 +394,21 @@ public class RezervaciaGUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				 if (stav == START) {
 					stav = ZRUSITIDREGISTRACIE;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERLET) {
 					let = lety.get(1);
 
 					stav = VYBERDRUHLETU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERDRUHLETU) {
 					spiatocny = true;
 
 					stav = VYBERTYPLETU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTYPLETU) {
@@ -404,14 +416,14 @@ public class RezervaciaGUI extends JFrame {
 
 
 					stav = VYBERTRIEDU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERTRIEDU) {
 					triedaLetu = Trieda.EKONOMICKA;
 
 					stav = VYBERSEDADLO;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == POKRACUJZAPLATIT) {
@@ -422,7 +434,7 @@ public class RezervaciaGUI extends JFrame {
 						ex.printStackTrace();
 						System.exit(-1);
 					}
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				//} else if (stav == ZAPLATIT) {
@@ -433,7 +445,7 @@ public class RezervaciaGUI extends JFrame {
 				 else if (stav == REGISTRACIAZRUSENA) {
 
 					 stav = ZRUSITIDREGISTRACIE;
-					 klavesnica.setText("");
+					 setText("");
 					 nastavObrazovku();
 				 }
 			}
@@ -450,27 +462,27 @@ public class RezervaciaGUI extends JFrame {
 				if (stav == START) {
 					stav = KONIECPROGRAMU;
 					System.exit(0);
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 
 				} else if (stav == VYBERLET) {
 					let = lety.get(2);
 
 					stav = VYBERDRUHLETU;
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 				else if (stav == ZAPLATIT) {
 					stav = KONIECPROGRAMU;
 					System.exit(0);
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 
 				else if (stav == REGISTRACIAZRUSENA) {
 					stav = KONIECPROGRAMU;
 					System.exit(0);
-					klavesnica.setText("");
+					setText("");
 					nastavObrazovku();
 				}
 			}
