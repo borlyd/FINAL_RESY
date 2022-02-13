@@ -18,6 +18,14 @@ public class Sedadlo {
 	this.obsadene = obsadene;
     }
 
+    public Sedadlo(int cislo, boolean obsadene, String trieda) {
+        this.cislo = cislo;
+        this.obsadene = obsadene;
+        this.trieda = trieda;
+    }
+
+
+
     public void setObsadene(boolean obsadene) {
 	this.obsadene = obsadene;
     }

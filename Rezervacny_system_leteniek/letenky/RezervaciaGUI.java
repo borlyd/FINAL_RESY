@@ -313,7 +313,8 @@ public class RezervaciaGUI extends JFrame {
 
 					if (let.getSedadla().get(zvoleneSedadlo - 1).getObsadene()) {
 						stav = OBSADENESEDADLO;
-					} else {
+					}
+					else {
 						cisloSedadla = zvoleneSedadlo;
 						let.getSedadla().get(zvoleneSedadlo-1).setObsadene(true);
 
