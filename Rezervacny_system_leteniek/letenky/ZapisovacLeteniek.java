@@ -15,7 +15,7 @@ public class ZapisovacLeteniek {
 	/**
 	 * Vytvori subor a nasledne do neho zapise udaje z rezervacie letenky
 	 */
-	File rezervovanaLetenka = new File( "temp/" + (zakaznik.getMeno() + zakaznik.getPriezvisko() + zakaznik.getId()) + ".txt");
+	File rezervovanaLetenka = new File( (zakaznik.getMeno() + zakaznik.getPriezvisko() + zakaznik.getId()) + ".txt");
 	FileWriter fileWriter = new FileWriter(rezervovanaLetenka);
 	PrintWriter printWriter = new PrintWriter(fileWriter);
 
