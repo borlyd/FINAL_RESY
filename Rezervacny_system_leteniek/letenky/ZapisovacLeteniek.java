@@ -1,11 +1,12 @@
 package letenky;
 
-import java.awt.Desktop;
+import java.awt.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
 public class ZapisovacLeteniek {
 
@@ -17,7 +18,8 @@ public class ZapisovacLeteniek {
 		 * Vytvori subor a nasledne do neho zapise udaje z rezervacie letenky
 		 */
 		String path = (this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath() + zakaznik.getMeno() + zakaznik.getPriezvisko() + zakaznik.getId()) + ".txt";
-		File rezervovanaLetenka = new File(path);
+		String decodedPath = URLDecoder.decode(path, "UTF-8");
+		File rezervovanaLetenka = new File(decodedPath);
 
 		FileWriter fileWriter = new FileWriter(rezervovanaLetenka);
 		PrintWriter printWriter = new PrintWriter(fileWriter);
