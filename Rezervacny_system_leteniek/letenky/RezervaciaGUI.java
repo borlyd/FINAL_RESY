@@ -6,6 +6,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -430,7 +431,7 @@ public class RezervaciaGUI extends JFrame {
 					stav = ZAPLATIT;
 					try {
 						zapisovac.zapisLetenky(objednavka);
-					}catch (IOException ex) {
+					}catch (IOException | URISyntaxException ex) {
 						ex.printStackTrace();
 						System.exit(-1);
 					}
